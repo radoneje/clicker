@@ -9,7 +9,7 @@ let soc=function (server){
         socket.on('disconnect', () => {
             console.log("disconnect", socket.id);
             clients=clients.filter(c=>c.id!=socket.id);
-            workers=clients.filter(c=>c.id!=socket.id);
+            workers=workers.filter(c=>c.id!=socket.id);
         });
         socket.on("helloClient", (arg) => {
             clients.push({id:socket.id, workerId:JSON.parse(arg).workerId})
