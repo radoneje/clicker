@@ -17,7 +17,7 @@ let soc=function (server){
         socket.on("helloWorker", (arg) => {
             console.log("helloWorker");
             workers.push({id:socket.id, workerId:workers.length+1})
-            soket.emit("readyWorker", workerId);
+            socket.emit("readyWorker", workerId);
         });
     })
 }
