@@ -22,7 +22,7 @@ let soc=function (server){
         });
         socket.on("message", (arg) => {
             var r=JSON.parse(arg);
-            console.log(r)
+            console.log(r, workers)
             workers.forEach(w=>{
                 if(w.workerId==arg.workerId) {
                     console.log("worker find", )
