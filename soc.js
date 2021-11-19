@@ -16,8 +16,9 @@ let soc=function (server){
         });
         socket.on("helloWorker", (arg) => {
             console.log("helloWorker");
-            workers.push({id:socket.id, workerId:workers.length+1})
-            socket.emit("readyWorker", workerId);
+            var w={id:socket.id, workerId:workers.length+1}
+            workers.push(w)
+            socket.emit("readyWorker", w.workerId);
         });
     })
 }
