@@ -15,6 +15,7 @@ let soc=function (server){
             clients.push({id:socket.id, workerId:JSON.parse(arg).workerId})
         });
         socket.on("helloWorker", (arg) => {
+            console.log("helloWorker");
             workers.push({id:socket.id, workerId:workers.length+1})
             soket.emit("readyWorker", workerId);
         });
