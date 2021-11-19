@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/clicker.iml" filepath="$PROJECT_DIR$/.idea/clicker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../rustv/.idea/rustv.iml" filepath="$PROJECT_DIR$/../rustv/.idea/rustv.iml" />
     </modules>
   </component>
 </project>
