@@ -24,7 +24,7 @@ let soc=function (server){
             var r=JSON.parse(arg);
 
             workers.forEach(w=>{
-                console.log(w.workerId==arg.workerId);
+                console.log(w.workerId,arg.workerId);
                 if(w.workerId==arg.workerId) {
                     console.log("worker find", )
                     w.socket.emit(r.cmd);
