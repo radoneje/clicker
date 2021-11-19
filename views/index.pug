@@ -6,6 +6,8 @@ block content
   p Welcome to #{title}
   #messages
   script.
+    var workerId=1;
+    var id=null;
     function addRow(txt){
       var elem=document.createElement("div")
       elem.innerHTML=txt;
@@ -13,7 +15,7 @@ block content
     }
     const socket = io();
     socket.on("connect", () => {
-      addRow("connect")
-      console.log("connect", socket.id); // x8WIv7-mJelg7on_ALbx
+      socket.emit("helloClient",JSON.stringify({workerId}))
+      id=socket.id
     });
     socket.emit("hello", "world");

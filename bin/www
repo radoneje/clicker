@@ -8,6 +8,7 @@ var app = require('../app');
 var debug = require('debug')('clicker:server');
 var http = require('http');
 const { Server } = require("socket.io");
+var soc = require('../soc');
 
 /**
  * Get port from environment and store in Express.
@@ -21,23 +22,8 @@ var port = normalizePort(process.env.PORT || '8200');
  */
 
 var server = http.createServer(app);
-const io = new Server(server, { /* options */ });
+soc(server)
 
-io.on('connection', function(socket) {
-  console.log('Client connected to the WebSocket');
-
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
-
-  socket.on('chat message', function(msg) {
-    console.log("Received a chat message");
-    io.emit('chat message', msg);
-  });
-  socket.on("hello", (arg) => {
-    console.log("socket hello", arg); // world
-  });
-})
 
 var logger = require('morgan');
 /**
