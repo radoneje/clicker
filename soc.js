@@ -22,9 +22,12 @@ let soc=function (server){
         });
         socket.on("message", (arg) => {
             var r=JSON.parse(arg);
+            console.log(r)
             workers.forEach(w=>{
-                if(w.workerId==arg.workerId)
-                    w.socket.emit(arg.cmd);
+                if(w.workerId==arg.workerId) {
+                    console.log("worker find", )
+                    w.socket.emit(r.cmd);
+                }
             })
         });
     })
