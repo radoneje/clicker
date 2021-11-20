@@ -42,9 +42,7 @@ let soc=function (server){
         });
 
         socket.on("timerTick", (arg) => {
-            console.log("timerTick", workers[0].socket.id, socket.id);
             var w=workers.filter(ww=>{return ww.socket.id==socket.id});
-            console.log("timerTick0 ", w.length);
             w.forEach(ww=>{
                 clients.forEach(c=>{
                     if(ww.workerId==c.workerId){
@@ -54,7 +52,7 @@ let soc=function (server){
             })
         });
         socket.on("timerStop", (arg) => {
-            var w=workers.filter(ww=>{ww.socket.id==socket.id});
+            var w=workers.filter(ww=>{return ww.socket.id==socket.id});
             w.forEach(ww=>{
                 clients.forEach(c=>{
                     if(ww.workerId==c.workerId){
