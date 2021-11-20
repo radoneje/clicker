@@ -66,8 +66,8 @@ block content
   #workBox
     .timerBox#timerBox
     .ArrowBox
-      .arrowItem(style="padding 4px; cursor:pointer;" onclick="clickL(this)") <
-      .arrowItem(style="padding 4px; cursor:pointer;" onclick="clickR(this)") >
+      .arrowItem#arrowL(style="padding 4px; cursor:pointer;" onclick="clickL(this)") <
+      .arrowItem#arrowR(style="padding 4px; cursor:pointer;" onclick="clickR(this)") >
   .notConnectBox#notConnectBox
     .notConnectWr
       .notConnectIco
@@ -128,3 +128,12 @@ block content
       }, 500)
       socket.emit("message",JSON.stringify({workerId, cmd:"r"}))
     }
+    document.getElementById("workBox").addEventListener("keydown",(e)=>{
+      console.log(e);
+      if(e.code=="ArrowRight"){
+        clickR(document.getElementById("arrowR"))
+      }
+      if (e.code == "ArrowLeft") {
+        clickR(document.getElementById("arrowL"))
+      }
+    })
