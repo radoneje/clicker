@@ -2,13 +2,81 @@ extends layout
 
 block content
   <script src="https://cdn.socket.io/4.4.0/socket.io.min.js" integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj" crossorigin="anonymous"></script>
-  h1= title
-  p Welcome to #{title}
-  div(style="padding 4px; cursor:pointer;" onclick="clickL()") <
-  div(style="padding 4px; cursor:pointer;" onclick="clickR()") >
+
+  style.
+    body{
+      background-color: #4b74e7;
+    }
+    .ArrowBox{
+      display: flex;
+    }
+    .arrowItem{
+      cursor: pointer;
+      width: 50%;
+      text-align: center;
+      padding: 50px;
+      font-size: 200px;
+      background-color: cornsilk;
+      transition: background-color .2s ease;
+      box-sizing: border-box;
+    }
+    .arrowItem:first-child{
+      border-right: 1px solid gray;
+    }
+    .arrowItem:hover{
+      background-color: #fde37b;
+    }
+
+    .arrowItem.clicked {
+      background-color: #cef163;
+    }
+    .timerBox{
+      text-align: center;
+      color:white;
+      padding: 20px;
+      background-color: #4b74e7;
+      font-size: 72px;
+      idth: 100%;
+      box-sizing: border-box;
+    }
+    .notConnectBox{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, .75);
+    }
+    .notConnectWr{
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      font-size: 24px;
+      box-sizing: border-box;
+    }
+    .notConnectWr{
+      text-align: center;
+    }
+    .notConnectIco img{
+      width: 64px;
+    }
+  #workBox
+    .timerBox  00:00:00
+    .ArrowBox
+      .arrowItem(style="padding 4px; cursor:pointer;" onclick="clickL(this)") <
+      .arrowItem(style="padding 4px; cursor:pointer;" onclick="clickR(this)") >
+  .notConnectBox#notConnectBox
+    .notConnectWr
+      .notConnectIco
+        img(src="/images/Warning_icon.svg")
+      .notConnectText Worker is not running on the host.<br> Please, wait.
+
   #messages
   script.
-    var workerId=1;
+    var workerId=!{workerId};
     var id=null;
     function addRow(txt){
       var elem=document.createElement("div")
@@ -19,12 +87,31 @@ block content
     socket.on("connect", () => {
       socket.emit("helloClient",JSON.stringify({workerId}))
       id=socket.id
+      document.getElementById("notConnectBox").style.display="none"
     });
-    function clickL(){
-      console.log("L")
+
+    socket.on("disconnect", ()=>{
+      document.getElementById("notConnectBox").style.display = "flex"
+    });
+
+    socket.on("workerOnline", () => {
+      document.getElementById("notConnectBox").style.display = "none"
+    });
+    socket.on("workerOffline", () => {
+      document.getElementById("notConnectBox").style.display = "flex"
+    });
+
+    function clickL(ctrl){
+      ctrl.classList.add("clicked")
+      setTimeout(()=>{
+        ctrl.classList.remove("clicked")
+      },500)
       socket.emit("message",JSON.stringify({workerId, cmd:"l"}))
     }
-    function clickR(){
-      console.log("R")
+    function clickR(ctrl){
+      ctrl.classList.add("clicked")
+      setTimeout(() => {
+        ctrl.classList.remove("clicked")
+      }, 500)
       socket.emit("message",JSON.stringify({workerId, cmd:"r"}))
     }
