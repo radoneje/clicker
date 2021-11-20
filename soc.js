@@ -42,6 +42,7 @@ let soc=function (server){
         });
 
         socket.on("timerTick", (arg) => {
+            console.log("timerTick", workers);
             var w=workers.filter(ww=>{ww.socket.id==socket.id});
             console.log("timerTick", w);
             w.forEach(ww=>{
