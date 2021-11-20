@@ -128,7 +128,7 @@ block content
       }, 500)
       socket.emit("message",JSON.stringify({workerId, cmd:"r"}))
     }
-    document.getElementById("workBox").addEventListener("keydown",(e)=>{
+    document.body.addEventListener("keydown",(e)=>{
       console.log(e);
       if(e.code=="ArrowRight"){
         clickR(document.getElementById("arrowR"))
