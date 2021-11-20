@@ -129,7 +129,8 @@ block content
       socket.emit("message",JSON.stringify({workerId, cmd:"r"}))
     }
     document.body.addEventListener("keydown",(e)=>{
-      console.log(e);
+      if(document.getElementById("notConnectBox").style.display!="none")
+        return;
       if(e.code=="ArrowRight"){
         clickR(document.getElementById("arrowR"))
       }
