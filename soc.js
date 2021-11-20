@@ -43,6 +43,7 @@ let soc=function (server){
 
         socket.on("timerTick", (arg) => {
             var w=workers.filter(ww=>{ww.socket.id==socket.id});
+            console.log("timerTick", w);
             w.forEach(ww=>{
                 clients.forEach(c=>{
                     if(ww.workerId==c.workerId){
