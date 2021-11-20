@@ -64,7 +64,7 @@ block content
       width: 64px;
     }
   #workBox
-    .timerBox  00:00:00
+    .timerBox#timerBox  00:00:00
     .ArrowBox
       .arrowItem(style="padding 4px; cursor:pointer;" onclick="clickL(this)") <
       .arrowItem(style="padding 4px; cursor:pointer;" onclick="clickR(this)") >
@@ -100,6 +100,11 @@ block content
     socket.on("workerOffline", () => {
       document.getElementById("notConnectBox").style.display = "flex"
     });
+    socket.on("timerTick", (arg) => {
+      console.log("timerTick", arg)
+      document.getElementById("timerBox").innerHTML=arg;
+    });
+
 
     function clickL(ctrl){
       ctrl.classList.add("clicked")

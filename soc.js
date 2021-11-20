@@ -5,7 +5,7 @@ let soc=function (server){
     var workers=[];
     var clients=[];
     io.on('connection', function(socket) {
-        console.log('Client connected to the WebSocket');
+        var workerId=0;
         socket.on('disconnect', () => {
             console.log("disconnect", socket.id);
             clients=clients.filter(c=>c.id!=socket.id);
@@ -40,6 +40,16 @@ let soc=function (server){
                 }
             })
         });
+
+        socket.on("timerTick", (arg) => {
+            ;
+            clients.forEach(c=>{
+                if(true){
+                    c.socket.emit("timerTick",arg)
+                }
+            })
+        });
+
         socket.on("message", (arg) => {
             var r=JSON.parse(arg);
 
