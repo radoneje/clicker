@@ -42,11 +42,23 @@ let soc=function (server){
         });
 
         socket.on("timerTick", (arg) => {
-            ;
-            clients.forEach(c=>{
-                if(true){
-                    c.socket.emit("timerTick",arg)
-                }
+            var w=workers.filter(ww=>{ww.socket.id==socket.id});
+            w.forEach(ww=>{
+                clients.forEach(c=>{
+                    if(ww.workerId==c.workerId){
+                        c.socket.emit("timerTick",arg)
+                    }
+                })
+            })
+        });
+        socket.on("timerStop", (arg) => {
+            var w=workers.filter(ww=>{ww.socket.id==socket.id});
+            w.forEach(ww=>{
+                clients.forEach(c=>{
+                    if(ww.workerId==c.workerId){
+                        c.socket.emit("timerStop",arg)
+                    }
+                })
             })
         });
 

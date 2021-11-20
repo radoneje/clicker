@@ -64,7 +64,7 @@ block content
       width: 64px;
     }
   #workBox
-    .timerBox#timerBox  00:00:00
+    .timerBox#timerBox
     .ArrowBox
       .arrowItem(style="padding 4px; cursor:pointer;" onclick="clickL(this)") <
       .arrowItem(style="padding 4px; cursor:pointer;" onclick="clickR(this)") >
@@ -106,6 +106,11 @@ block content
       date.setSeconds(arg); // specify value for SECONDS here
       var result = date.toISOString().substr(11, 8);
       document.getElementById("timerBox").innerHTML=result;
+    });
+    socket.on("timerStop", (arg) => {
+      console.log("timerStop", arg)
+      var date = new Date(null);
+      document.getElementById("timerBox").innerHTML = "";
     });
 
 
