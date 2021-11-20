@@ -102,7 +102,10 @@ block content
     });
     socket.on("timerTick", (arg) => {
       console.log("timerTick", arg)
-      document.getElementById("timerBox").innerHTML=arg;
+      var date = new Date(null);
+      date.setSeconds(arg); // specify value for SECONDS here
+      var result = date.toISOString().substr(11, 8);
+      document.getElementById("timerBox").innerHTML=result;
     });
 
 
