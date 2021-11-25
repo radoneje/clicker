@@ -74,7 +74,7 @@ class soc {
 
                 this.workers.forEach(w => {
                     if (w.workerId == r.workerId) {
-                        console.log("worker find",)
+                        console.log("worker ",r.cmd);
                         w.socket.emit(r.cmd);
                     }
                 })
@@ -91,6 +91,7 @@ class soc {
     pre=function (id){
         this.workers.forEach(w => {
             if (w.workerId == id) {
+                console.log("pre api",JSON.stringify({workerId:id, cmd:"l"} ));
                 w.socket.emit(JSON.stringify({workerId:id, cmd:"l"}));
             }
         })
