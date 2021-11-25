@@ -22,7 +22,9 @@ var port = normalizePort(process.env.PORT || '8200');
  */
 
 var server = http.createServer(app);
-soc(server)
+ var webSocket=new soc(server)
+app.webSocket=webSocket;
+
 
 
 var logger = require('morgan');
@@ -92,4 +94,7 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   console.log('Listening on ' + bind);
+
+
+
 }

@@ -1,79 +1,102 @@
 const {Server} = require("socket.io");
-let soc=function (server){
 
-    const io = new Server(server, { /* options */ });
-    var workers=[];
-    var clients=[];
-    io.on('connection', function(socket) {
-        var workerId=0;
-        socket.on('disconnect', () => {
-            console.log("disconnect", socket.id);
-            clients=clients.filter(c=>c.id!=socket.id);
-            var closeWorkers=workers.filter(c=>c.id==socket.id);
-            workers=workers.filter(c=>c.id!=socket.id);
-            closeWorkers.forEach(w=>{
-                clients.forEach(c=>{
-                    if(c.workerId==w.workerId){
-                        c.socket.emit("workerOffline")
-                    }
+class soc {
+
+    workers = [];
+    clients = [];
+
+    constructor(server) {
+        var io = new Server(server, { /* options */});
+        io.on('connection', (socket) => {
+            var workerId = 0;
+            socket.on('disconnect', () => {
+                console.log("disconnect", socket.id);
+                this.clients = this.clients.filter(c => c.id != socket.id);
+                var closeWorkers = this.workers.filter(c => c.id == socket.id);
+                this.workers = this.workers.filter(c => c.id != socket.id);
+                closeWorkers.forEach(w => {
+                    this.clients.forEach(c => {
+                        if (c.workerId == w.workerId) {
+                            c.socket.emit("workerOffline")
+                        }
+                    })
                 })
-            })
-        });
-        socket.on("helloClient", (arg) => {
-            var c={id:socket.id, workerId:JSON.parse(arg).workerId, socket}
-            clients.push(c);
+            });
+            socket.on("helloClient", (arg) => {
+                var c = {id: socket.id, workerId: JSON.parse(arg).workerId, socket}
+                this.clients.push(c);
 
-            var ww=workers.filter(w=>w.workerId==c.workerId)
-            if(ww.length>0)
-                c.socket.emit("workerOnline")
-            else
-                c.socket.emit("workerOffline")
-
-        });
-        socket.on("helloWorker", (arg) => {
-            var w={id:socket.id, workerId:workers.length+1, socket}
-            workers.push(w)
-            socket.emit("readyWorker", w.workerId);
-            clients.forEach(c=>{
-                if(c.workerId==w.workerId){
+                var ww = this.workers.filter(w => w.workerId == c.workerId)
+                if (ww.length > 0)
                     c.socket.emit("workerOnline")
-                }
-            })
-        });
+                else
+                    c.socket.emit("workerOffline")
 
-        socket.on("timerTick", (arg) => {
-            var w=workers.filter(ww=>{return ww.socket.id==socket.id});
-            w.forEach(ww=>{
-                clients.forEach(c=>{
-                    if(ww.workerId==c.workerId){
-                        c.socket.emit("timerTick",arg)
+            });
+            socket.on("helloWorker", (arg) => {
+                var w = {id: socket.id, workerId: this.workers.length + 1, socket}
+                this.workers.push(w)
+                socket.emit("readyWorker", w.workerId);
+                this.clients.forEach(c => {
+                    if (c.workerId == w.workerId) {
+                        c.socket.emit("workerOnline")
                     }
                 })
-            })
-        });
-        socket.on("timerStop", (arg) => {
-            var w=workers.filter(ww=>{return ww.socket.id==socket.id});
-            w.forEach(ww=>{
-                clients.forEach(c=>{
-                    if(ww.workerId==c.workerId){
-                        c.socket.emit("timerStop",arg)
+            });
+
+            socket.on("timerTick", (arg) => {
+                var w = this.workers.filter(ww => {
+                    return ww.socket.id == socket.id
+                });
+                w.forEach(ww => {
+                    this.clients.forEach(c => {
+                        if (ww.workerId == c.workerId) {
+                            c.socket.emit("timerTick", arg)
+                        }
+                    })
+                })
+            });
+            socket.on("timerStop", (arg) => {
+                var w = this.workers.filter(ww => {
+                    return ww.socket.id == socket.id
+                });
+                w.forEach(ww => {
+                    this.clients.forEach(c => {
+                        if (ww.workerId == c.workerId) {
+                            c.socket.emit("timerStop", arg)
+                        }
+                    })
+                })
+            });
+
+            socket.on("message", (arg) => {
+                var r = JSON.parse(arg);
+
+                this.workers.forEach(w => {
+                    if (w.workerId == r.workerId) {
+                        console.log("worker find",)
+                        w.socket.emit(r.cmd);
                     }
                 })
-            })
-        });
+            });
+        })
+    }
+    next=function (id){
+        this.workers.forEach(w => {
+            if (w.workerId == id) {
+                w.socket.emit(JSON.stringify({workerId:id, cmd:"r"}));
+            }
+        })
+    }
+    pre=function (id){
+        this.workers.forEach(w => {
+            if (w.workerId == id) {
+                w.socket.emit(JSON.stringify({workerId:id, cmd:"l"}));
+            }
+        })
+    }
 
-        socket.on("message", (arg) => {
-            var r=JSON.parse(arg);
 
-            workers.forEach(w=>{
-                console.log(w.workerId,r.workerId);
-                if(w.workerId==r.workerId) {
-                    console.log("worker find", )
-                    w.socket.emit(r.cmd);
-                }
-            })
-        });
-    })
 }
 
 module.exports = soc;
